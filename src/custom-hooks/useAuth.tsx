@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, User } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
+import { firebaseApp } from "../firebase/firebase";
 
 const authContext = createContext<IAuth | undefined>(undefined);
 
@@ -17,17 +18,18 @@ export const useAuth = () => {
         throw new Error("useAuth must be within authContext");
     }
 
-    return useContext(authContext);
+    return context;
 };
 
 function useProvideAuth() {
     const [user, setUser] = useState<User | null>(null);
-    const auth = getAuth();
+    const auth = getAuth(firebaseApp);
 
-    const login = (email: string, password: string) => {
+    const login = (email: string, password: string, callback: VoidFunction) => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setUser(userCredential.user);
+                callback();
             })
             .catch((error: FirebaseError) => {
                 console.log(error.code);
@@ -35,20 +37,33 @@ function useProvideAuth() {
             });
     };
 
-    const signup = (email: string, password: string) => {
+    const signup = (email: string, password: string, callback: VoidFunction) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setUser(userCredential.user);
+                callback();
+                /*
+                if (auth.currentUser) {
+                    updateProfile(auth.currentUser, {
+                        displayName: username
+                    }).then(() => callback())
+                      .catch((error: FirebaseError) => {
+                          console.log(error.code);
+                          console.log(error.message);
+                      });
+                };
+                */
             })
             .catch((error: FirebaseError) => {
                 console.log(error.code);
                 console.log(error.message);
-            });
+            });   
     };
 
-    const logout = () => {
+    const logout = (callback: VoidFunction) => {
         signOut(auth).then(() => {
             setUser(null);
+            callback();
         }).catch((error: FirebaseError) => {
             console.log(error.message);
         });
@@ -64,7 +79,7 @@ function useProvideAuth() {
         });
 
         return () => unsubscribe();
-    });
+    }, []);
 
     return { user, login, signup, logout };
 };

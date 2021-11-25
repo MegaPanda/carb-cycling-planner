@@ -2,7 +2,7 @@ import 'styled-components';
 import { CSSProp } from 'styled-components';
 
 const theme = {
-    border: "1px solid #9CA3AF",
+    border: "1px solid #D1D5DB",
     colors: {
         labelGray: "#6B7280",
         buttonGreen: "#059669",
@@ -10,6 +10,7 @@ const theme = {
         buttonGray: "#6B7280",
         hoverGray: "#374151",
         focusBlue: "#3B82F6",
+        warningRed: "#DC2626",
     },
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -30,12 +30,9 @@ const Icon = styled.div`
     opacity: 0.5;
 `;
 
-const Input = styled.input.attrs(props => ({
-    type: props.type,
-}))`
+const Input = styled.input`
     flex: 1;
     height: 100%;
-    width: max-content;
     padding: 5px 5px 5px 0;
     border: none;
 
@@ -44,24 +41,26 @@ const Input = styled.input.attrs(props => ({
     }
 `;
 
-const LoginInputField = ({
+const AuthInputField = ({
     labelText,
     inputType,
-    icon
+    icon,
+    updateInput
 }: {
     labelText: string,
     inputType: string,
-    icon: () => JSX.Element
+    icon: () => JSX.Element,
+    updateInput: Dispatch<SetStateAction<string>>
 }) => {
     return (
         <Wrapper>
             <Label>{labelText}</Label>
             <InputDiv>
                 <Icon>{icon()}</Icon>
-                <Input type={inputType} />
+                <Input type={inputType} onChange={(event) => updateInput(event.target.value)} />
             </InputDiv>
         </Wrapper>
     )
 };
 
-export default LoginInputField;
+export default AuthInputField;

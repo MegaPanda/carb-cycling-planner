@@ -1,5 +1,6 @@
 html {
     box-sizing: border-box;
+    cursor: default;
 }
 
 *, *:before, *:after {
@@ -12,5 +13,13 @@ body {
 }
 
 button {
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }

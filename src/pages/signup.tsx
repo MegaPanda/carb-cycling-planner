@@ -1,9 +1,22 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
-import AuthForm from "../components/authForm";
+import { emailIcon, passwordIcon } from "../components/icons";
+import { useAuth } from "../custom-hooks/useAuth";
+import { useNavigate } from "react-router";
+import SubmitButton from "../components/submitButton";
+import AuthInputField from "../components/authInputField";
 
 const Container = styled.div`
     padding: 3rem;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Title = styled.p`
+    font-size: 36px;
+    font-weight: 900;
+    text-align: center;
 `;
 
 const Paragraph = styled.p`
@@ -11,9 +24,25 @@ const Paragraph = styled.p`
 `;
 
 const SignUp = () => {
+    const auth = useAuth();
+    const navigate = useNavigate();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     return (
         <Container>
-            <AuthForm title="Sign Up"></AuthForm>
+            <Title>Sign Up</Title>
+            <form onSubmit={(event) => {
+                event.preventDefault();
+                auth.signup(email, password, () => {
+                    navigate("/user/dashboard");
+                });
+            }}>
+                <AuthInputField labelText="E-mail" inputType="email" icon={emailIcon} updateInput={setEmail} />
+                <AuthInputField labelText="Password" inputType="password" icon={passwordIcon} updateInput={setPassword} />
+                <SubmitButton buttonText="SIGN UP" />
+            </form>
             <Paragraph>Already a member?
                 <Link to="/login" css={`
                     margin-left: 5px;

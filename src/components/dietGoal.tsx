@@ -5,15 +5,16 @@ import { setGoal } from "../redux/reducers/userSlice";
 const Wrapper = styled.div`
     padding: 1rem 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 1rem;
     justify-items: center;
 `;
 
 const Label = styled.label`
     display: flex;
     flex-direction: column;
-    width: 100px;
-    height: 40px;
+    width: 90px;
+    height: 60px;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
     cursor: pointer;
     
@@ -30,11 +31,13 @@ const RadioButton = styled.input`
     }
 `;
 
-const DietGoal = ({goal}: {goal: string}) => {
+const DietGoal = ({ uid, goal }: { uid: string, goal: string }) => {
     const dispatch = useAppDispatch();
 
     const handleSelect = (goal: string) => {
-        dispatch(setGoal(goal));
+        if (uid) {
+            dispatch(setGoal({ uid, goal }));
+        }
     };
     
     return (

@@ -2,12 +2,10 @@ import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
 import Nav from "../components/nav";
-import { useAuth } from "../custom-hooks/useAuth";
 import { useFood } from "../custom-hooks/useFood";
 
-const AuthRoute = () => {
+const AuthRoute = ({ uid }: { uid: string }) => {
     const location = useLocation();
-    const user = useAuth().user;
     const food = useFood();
     const date = format(new Date(), "dd MMM");
 
@@ -15,7 +13,7 @@ const AuthRoute = () => {
         food.setDate(date);
     }, []);
 
-    if (user) {
+    if (uid) {
         return (
             <Fragment>
                 <Outlet />

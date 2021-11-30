@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { FoodItemType, MealType } from "../redux/reducers/userSlice";
+import { Food, MealName } from "../redux/reducers/userSlice";
 
 const FoodContext = createContext<IFood | undefined>(undefined);
 
@@ -22,8 +22,9 @@ export const useFood = () => {
 function useProvideFood() {
     const [action, setAction] = useState("");
     const [date, setDate] = useState("");
-    const [meal, setMeal] = useState<MealType>("breakfast");
-    const [foodItem, setFoodItem] = useState<FoodItemType | undefined>(undefined);
+    const [meal, setMeal] = useState<MealName>("breakfast");
+    const [foodItem, setFoodItem] = useState<Food | undefined>(undefined);
+    const [diaryId, setDiaryId] = useState<string>("");
 
-    return { action, date, meal, foodItem, setAction, setDate, setMeal, setFoodItem };
+    return { action, date, meal, foodItem, diaryId, setAction, setDate, setMeal, setFoodItem, setDiaryId };
 }

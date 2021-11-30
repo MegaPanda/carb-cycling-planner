@@ -19,9 +19,6 @@ const ToggleButton = styled.button`
 `;
 
 const Wrapper = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
     margin-bottom: 3rem;
 `;
 
@@ -39,51 +36,58 @@ const UsernameInput = styled.input`
 `;
 
 const ChangeNameButton = styled.button`
-    padding: 0 10px;
-    height: 40px;
+    display: block;
+    margin-top: 0.75rem;
+    padding: 0.5rem;
     border: none;
+    font-size: 0.75rem;
     color: white;
     background-color: ${props => props.theme.colors.buttonGreen};
-    border-radius: 5px;
+    border-radius: 0.25rem;
 
     :hover {
         background-color: ${props => props.theme.colors.hoverGreen};
     }
+
+    :disabled {
+        background-color: ${props => props.theme.colors.hoverGray};
+        cursor: default;
+    }
 `;
 
-const Setting = ({userData}: {userData: UserState}) => {
+const Setting = ({ user }: { user: UserState }) => {
     const dispatch = useAppDispatch();
     const [showName, setShowName] = useToggle();
     const [showTdee, setShowTdee] = useToggle();
     const [showGoal, setShowGoal] = useToggle();
-    const [name, setName] = useState(userData.username);
+    const [name, setName] = useState(user.username);
 
     const handleClick = () => {
         if (name) {
-            dispatch(setUsername(name));
+            dispatch(setUsername({ username: name }));
         }
     };
     
     return (
         <Container>
-            <LoggingButton />
+            <LoggingButton uid={user.uid} />
             <h1>MY INFO</h1>
             <ToggleButton type="button" onClick={() => setShowName()}>Change My Profile Name</ToggleButton>
             {showName &&
                 <Wrapper>
-                    <UsernameInput type="text" value={name} onChange={(event) => setName(event.target.value)} />
-                    <ChangeNameButton type="button" onClick={() => handleClick()}>Change</ChangeNameButton>
+                    <UsernameInput type="text" value={name!} onChange={(event) => setName(event.target.value)} />
+                    <ChangeNameButton type="button" disabled={!Boolean(name)} onClick={() => handleClick()}>Change</ChangeNameButton>
                 </Wrapper>
             }
             <ToggleButton type="button" onClick={() => setShowTdee()}>Update My TDEE</ToggleButton>
             {showTdee &&
-                <div css={`margin-bottom: 3rem;`}>
-                    <TDEECalculator userTdee={userData.tdee} />
-                </div>
+                <Wrapper>
+                    <TDEECalculator uid={user.uid} userTdee={user.tdee} />
+                </Wrapper>
             }
             <ToggleButton type="button" onClick={() => setShowGoal()}>Update My Goal</ToggleButton>
             {showGoal &&
-                <DietGoal goal={userData.goal} />
+                <DietGoal uid={user.uid} goal={user.goal} />
             }
         </Container>
     )

@@ -4,12 +4,10 @@ import useAppDispatch from "../custom-hooks/useAppDispatch";
 import { useFood } from "../custom-hooks/useFood";
 import useToggle from "../custom-hooks/useToggle";
 import { getCalories } from "../helpers/helpers";
-import { deleteFoodItem, FoodItemType, MealType } from "../redux/reducers/userSlice";
+import { deleteFood, Food, MealName } from "../redux/reducers/userSlice";
 import { ellipsisIcon } from "./icons";
-import ReactModal from "react-modal";
 import FullPageModal from "./fullPageModal";
-
-ReactModal.setAppElement("#root");
+import useAppSelector from "../custom-hooks/useAppSelector";
 
 const Container = styled.div`
     display: flex;
@@ -69,49 +67,48 @@ const DeleteButton = styled.button`
 `;
 
 const FoodItem = ({
-    foodItem,
+    foodItem, 
+    diaryId, 
     meal
 }: {
-    foodItem: FoodItemType;
-    meal: MealType;
+    foodItem: Food;
+    diaryId?: string;
+    meal: MealName
 }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const food = useFood();
+    const uid = useAppSelector(state => state.user.uid);
 
-    const showFoodDetails = (foodItem: FoodItemType, meal: MealType) => {
+    const showFoodDetails = () => {
         food.setFoodItem(foodItem);
         food.setMeal(meal);
+        diaryId ? food.setDiaryId(diaryId) : food.setDiaryId("");
         navigate("/user/foodDetails");
     };
 
     const [showDelete, setShowDelete] = useToggle();
 
-    const handleDelete = (foodItem: FoodItemType, date: string, meal: MealType) => {
-        dispatch(deleteFoodItem({
-            foodName: foodItem.name,
-            foodGrams: foodItem.grams,
-            date,
-            meal
-        }));
+    const handleDelete = (diaryId: string) => {
+        dispatch(deleteFood({ uid, diaryId }));
         setShowDelete();
     };
 
     return (
         <Container>
-            <FoodButton onClick={() => showFoodDetails(foodItem, meal)}>
+            <FoodButton onClick={() => showFoodDetails()}>
                 <div>
                     <Title>{foodItem.name}</Title>
                     <Weight>{foodItem.grams} gram</Weight>
                 </div>
             </FoodButton>
             <Info>
-                {food.action === "Edit Food" &&
+                {food.action === "Edit Food" && diaryId &&
                     <Ellipsis type="button" onClick={() => setShowDelete()}>{ellipsisIcon()}</Ellipsis>
                 }
                 <Calories>{getCalories(foodItem.carbs, foodItem.protein, foodItem.fat)}</Calories>
-                {showDelete &&
-                    <DeleteButton type="button" autoFocus onBlur={() => setShowDelete()} onClick={() => handleDelete(foodItem, food.date, meal)}>DELETE</DeleteButton>
+                {showDelete && diaryId &&
+                    <DeleteButton type="button" autoFocus onBlur={() => setShowDelete()} onClick={() => handleDelete(diaryId)}>DELETE</DeleteButton>
                 }
             </Info>
             {showDelete &&

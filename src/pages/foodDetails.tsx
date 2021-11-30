@@ -5,7 +5,7 @@ import { addIcon, returnIcon } from "../components/icons";
 import { useNavigate } from "react-router";
 import useAppDispatch from "../custom-hooks/useAppDispatch";
 import { useFood } from "../custom-hooks/useFood";
-import { addFoodItem, deleteFoodItem } from "../redux/reducers/userSlice";
+import { addFood, updateFood } from "../redux/reducers/userSlice";
 
 const Container = styled.div`
     padding: 2rem;
@@ -68,13 +68,12 @@ const Calories = styled(Nutrient)`
 
 
 
-const FoodItemDetails = () => {
+const FoodItemDetails = ({ uid }: { uid: string }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const food = useFood();
    
-    const originalGrams = food.foodItem?.grams;
-    const [gramsInput, setGramsInput] = useState(originalGrams);
+    const [gramsInput, setGramsInput] = useState(food.foodItem?.grams);
     const updatedFoodItem = getUpdatedMacros(food.foodItem!, gramsInput!);
     
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -88,24 +87,20 @@ const FoodItemDetails = () => {
 
     const handleSubmit = () => {
         if (food.action === "Add Food") {
-            dispatch(addFoodItem({
-                foodItem: updatedFoodItem,
+            dispatch(addFood({
+                uid,
+                food: updatedFoodItem,
                 date: food.date,
                 meal: food.meal
             }));
             navigate(-2);
         } else if (food.action === "Edit Food") {
-            dispatch(deleteFoodItem({
-                foodName: updatedFoodItem.name,
-                foodGrams: originalGrams!,
-                date: food.date,
-                meal: food.meal
+            dispatch(updateFood({ 
+                uid,
+                diaryId: food.diaryId,
+                food: updatedFoodItem
             }));
-            dispatch(addFoodItem({
-                foodItem: updatedFoodItem,
-                date: food.date,
-                meal: food.meal
-            }));
+            food.setDiaryId("");
             navigate(-1);
         } 
     };
@@ -114,7 +109,7 @@ const FoodItemDetails = () => {
         <Container>
             <Nav>
                 <button type="button" onClick={() => handleReturn()}>{returnIcon()}</button>
-                <p>{food?.action}</p>
+                <p>{food.action}</p>
                 <button type="button" onClick={() => handleSubmit()}>{addIcon()}</button>
             </Nav>
             <h1 css={`

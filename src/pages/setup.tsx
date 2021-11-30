@@ -5,8 +5,7 @@ import DietGoal from "../components/dietGoal";
 import { addIcon, nextIcon, returnIcon } from "../components/icons";
 import TDEECalculator from "../components/tdeeCalculator";
 import useAppDispatch from "../custom-hooks/useAppDispatch";
-import useAppSelector from "../custom-hooks/useAppSelector";
-import { setUsername } from "../redux/reducers/userSlice";
+import { setUsername, UserState } from "../redux/reducers/userSlice";
 
 const Container = styled.div`
     padding: 2rem;
@@ -35,42 +34,41 @@ const StepButton = styled.button`
     text-align: center;
 `;
 
-const Setup = () => {
+const Setup = ({ user }: { user: UserState }) => {
     const dispatch = useAppDispatch();
-    const userData = useAppSelector((state) => state.user);
     const [step, setStep] = useState(1);
     const [name, setName] = useState("");
 
     const handleSubmit = () => {
         if (!name) {
             setStep(1);
-        } else if (!Boolean(userData.tdee)) {
+        } else if (!Boolean(user.tdee)) {
             setStep(2);
         } else {
-            dispatch(setUsername(name));
+            dispatch(setUsername({ username: name }));
         }
     };
 
-    if (!userData.username) {
+    if (!user.username) {
         return (
             <Container>
-                <h1>Set Up Page</h1>
+                <h2>Set Up Your Profile</h2>
                 {step === 1 &&
                     <Wrapper>
-                        <h3>Step 1 - Enter Your Name</h3>
+                        <h5>Step 1 - Enter Your Name</h5>
                         <UsernameInput type="text" value={name} onChange={(event) => setName(event.target.value)} />
                     </Wrapper>
                 }
                 {step === 2 &&
                     <Wrapper>
-                        <h3>Step 2 - Calculate Your TDEE</h3>
-                        <TDEECalculator userTdee={userData.tdee} />
+                        <h5>Step 2 - Calculate Your TDEE</h5>
+                        <TDEECalculator uid={user.uid} userTdee={user.tdee} />
                     </Wrapper>
                 }
                 {step === 3 &&
                     <Wrapper>
-                        <h3>Step 3 - Choose Your Goal</h3>
-                        <DietGoal goal={userData.goal} />
+                        <h5>Step 3 - Choose Your Goal</h5>
+                        <DietGoal uid={user.uid} goal={user.goal} />
                     </Wrapper>
                 }
                 <Wrapper css={`display: flex; justify-content: space-between;`}>

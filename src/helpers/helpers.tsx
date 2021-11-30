@@ -1,4 +1,4 @@
-import { FoodItemType, MealsType } from "../redux/reducers/userSlice";
+import { DiaryEntry, Food } from "../redux/reducers/userSlice";
 
 export const getCalories = (carbs: number, protein: number, fat: number) => {
     return Math.round((carbs + protein) * 4 + fat * 9);
@@ -12,7 +12,7 @@ export const getTdee = (sex: string, weight: number, height: number, age: number
     }
 };
 
-export const getUpdatedMacros = (foodItem: FoodItemType, gramsInput: number) => {
+export const getUpdatedMacros = (foodItem: Food, gramsInput: number) => {
     function updateMacro(macro: number, baseGrams: number) {
         return parseFloat((macro * (baseGrams / foodItem.grams)).toFixed(1));
     }
@@ -52,17 +52,17 @@ export const getMicrosGoal = (tdeeGoal: number, carbsLevel: string) => {
     switch (carbsLevel) {
         case "low":
             carbs = Math.round(tdeeGoal * 0.1 / 4);
-            protein = Math.round(tdeeGoal * 0.35 / 4);
+            protein = Math.round(tdeeGoal * 0.3 / 4);
             fat = Math.round((tdeeGoal - (carbs + protein) * 4) / 9);
             return { calories: tdeeGoal, carbs, protein, fat};
         case "moderate": 
-            carbs = Math.round(tdeeGoal * 0.30 / 4);
-            protein = Math.round(tdeeGoal * 0.35 / 4);
+            carbs = Math.round(tdeeGoal * 0.35 / 4);
+            protein = Math.round(tdeeGoal * 0.3 / 4);
             fat = Math.round((tdeeGoal - (carbs + protein) * 4) / 9);
             return { calories: tdeeGoal, carbs, protein, fat};
         case "high": 
             carbs = Math.round(tdeeGoal * 0.5 / 4);
-            protein = Math.round(tdeeGoal * 0.35 / 4);
+            protein = Math.round(tdeeGoal * 0.3 / 4);
             fat = Math.round((tdeeGoal - (carbs + protein) * 4) / 9);
             return { calories: tdeeGoal, carbs, protein, fat};
         default:
@@ -70,20 +70,18 @@ export const getMicrosGoal = (tdeeGoal: number, carbsLevel: string) => {
     }
 };
 
-export const getConsumedMicros = (mealsData: MealsType | undefined) => {
-    function getConsumedMicro(mealsData: MealsType, micro: "carbs" | "protein" | "fat") {                                    
+export const getConsumedMicros = (diaryToday: DiaryEntry[]) => {
+    function getConsumedMicro(diaryToday: DiaryEntry[], micro: "carbs" | "protein" | "fat") {                                    
         return Math.round(
-                Object.values(mealsData)
-                // flatten the array first//
-                .reduce((a, b) => a.concat(b))
-                // then sum the values in the objects //
+                diaryToday.map((entry) => entry.food)
+                // sum the values in the objects //
                 .reduce((a, b) => a + b[micro], 0));
     };
 
-    if (mealsData) {
-        const carbs = getConsumedMicro(mealsData, "carbs");
-        const protein = getConsumedMicro(mealsData, "protein");
-        const fat = getConsumedMicro(mealsData, "fat");
+    if (diaryToday.length !== 0) {
+        const carbs = getConsumedMicro(diaryToday, "carbs");
+        const protein = getConsumedMicro(diaryToday, "protein");
+        const fat = getConsumedMicro(diaryToday, "fat");
 
         return {
             carbs,
@@ -99,4 +97,21 @@ export const getConsumedMicros = (mealsData: MealsType | undefined) => {
             calories: 0
         }
     }
+};
+
+export const getKeywords = (name: string) => {
+    let str = name;
+    let keywordsArray: string[] = [];
+
+    while (str.length >= 1) {
+        for (let i = 0; i < str.length; i++) {
+            let slicedStr = str.slice(0, i + 1);
+            if (!keywordsArray.some((keyword) => keyword === slicedStr) && slicedStr !== " ") {
+                keywordsArray.push(str.slice(0, i + 1));
+            }
+        }
+        str = str.slice(1);
+    }
+
+    return keywordsArray;
 };

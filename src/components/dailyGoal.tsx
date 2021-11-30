@@ -7,17 +7,25 @@ import { setDailyCarbsLevel } from "../redux/reducers/userSlice";
 import { ellipsisIcon } from "./icons";
 import SubmitButton from "./submitButton";
 
+const Form = styled.form`
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    height: 120px; 
+`;
+
 const Wrapper = styled.div`
     padding: 10px 5px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 0.5rem;
     justify-items: center;
 `;
 
 const Label = styled.label`
     display: flex;
     flex-direction: column;
-    width: 100px;
+    width: 90px;
     height: 40px;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
     cursor: pointer;
@@ -44,6 +52,7 @@ const ResetButton = styled.button`
 const MicrosWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: 10px 0;
 `;
 
 const Micro = styled.div`
@@ -58,7 +67,7 @@ const Micro = styled.div`
 `;
 
 const MicroGrams = styled.h2<{over?: boolean}>`
-    margin: 12px 0;
+    margin: 8px 0 0 0;
     color: ${props => props.over ? props.theme.colors.warningRed : props.theme.colors.buttonGreen};
 `;
 
@@ -73,15 +82,17 @@ type MicrosGoalType = {
 
 
 const DailyGoal = ({
+    uid,
     tdee, 
     goal,
     dailyCarbsLevel,
     consumedMicros
 }: {
-    tdee: number, 
-    goal: string,
-    dailyCarbsLevel: string | undefined,
-    consumedMicros: MicrosGoalType
+    uid: string;
+    tdee: number; 
+    goal: string;
+    dailyCarbsLevel: string | undefined;
+    consumedMicros: MicrosGoalType;
 }) => {
     const dispatch = useAppDispatch();
     const food = useFood();
@@ -107,18 +118,19 @@ const DailyGoal = ({
         if (carbsLevel) {
             setMicrosGoal(getMicrosGoal(getTdeeGoal(tdee, goal), carbsLevel));
             dispatch(setDailyCarbsLevel({
+                uid,
                 carbsLevel,
                 date: food.date
             }));
+            setShowGoalForm(false);
         }
-        setShowGoalForm(false);
     };
 
 
     return (
         <div>
             {showGoalForm &&
-                <form onSubmit={(event) => handleSubmit(event)} css={`height: 120px;`}>
+                <Form onSubmit={(event) => handleSubmit(event)} css={``}>
                     <Wrapper>
                         <div>
                             <RadioButton type="radio" name="carbs" id="low" hidden 
@@ -145,8 +157,8 @@ const DailyGoal = ({
                             </Label>
                         </div>
                     </Wrapper>
-                    <SubmitButton buttonText="SET GOAL" />
-                </form>
+                    <SubmitButton width="286px" buttonText="SET GOAL" />
+                </Form>
             }
             {(microsGoal && !showGoalForm) &&
                 <div css={`height: 120px;`}>
@@ -158,25 +170,37 @@ const DailyGoal = ({
                         <Micro> 
                             <span>Carbs:</span>
                             <MicroGrams over={microsGoal.carbs - consumedMicros.carbs < 0}>
-                                {microsGoal.carbs - consumedMicros.carbs}
+                                {microsGoal.carbs - consumedMicros.carbs < 0 
+                                    ? "+" + Math.abs(microsGoal.carbs - consumedMicros.carbs)
+                                    : microsGoal.carbs - consumedMicros.carbs
+                                }
                             </MicroGrams>
                         </Micro>
                         <Micro>
                             <span>Protein:</span>
                             <MicroGrams over={microsGoal.protein - consumedMicros.protein < 0}>
-                                {microsGoal.protein - consumedMicros.protein}
+                                {microsGoal.protein - consumedMicros.protein < 0
+                                    ? "+" + Math.abs(microsGoal.protein - consumedMicros.protein)
+                                    : microsGoal.protein - consumedMicros.protein
+                                }
                             </MicroGrams>
                         </Micro>
                         <Micro>
                             <span>Fat:</span>
                             <MicroGrams over={microsGoal.fat - consumedMicros.fat < 0}>
-                                {microsGoal.fat - consumedMicros.fat}
+                                {microsGoal.fat - consumedMicros.fat < 0
+                                    ? "+" + Math.abs(microsGoal.fat - consumedMicros.fat)
+                                    : microsGoal.fat - consumedMicros.fat
+                                }
                             </MicroGrams>
                         </Micro>
                         <Micro>
                             <span>Calories:</span>
                             <MicroGrams over={microsGoal.calories - consumedMicros.calories < 0}>
-                                {microsGoal.calories - consumedMicros.calories}
+                                {microsGoal.calories - consumedMicros.calories < 0
+                                    ? "+" + Math.abs(microsGoal.calories - consumedMicros.calories)
+                                    : microsGoal.calories - consumedMicros.calories
+                                }
                             </MicroGrams>
                         </Micro>
                     </MicrosWrapper>

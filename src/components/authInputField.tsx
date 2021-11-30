@@ -24,7 +24,7 @@ const InputDiv = styled.div`
 
 const Icon = styled.div`
     display: flex;
-    width: 30px;
+    width: 2rem;
     height: 100%;
     vertical-align: top;
     opacity: 0.5;

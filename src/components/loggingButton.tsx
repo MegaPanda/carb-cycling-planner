@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { useAuth } from "../custom-hooks/useAuth";
+import useAppDispatch from "../custom-hooks/useAppDispatch";
+import { logout } from "../redux/reducers/userSlice";
 
 const Wrapper = styled.div`
     text-align: right;
@@ -12,15 +13,15 @@ const StyledLoggingButton = styled.button`
     font-weight: 700;
 `;
 
-const LoggingButton = () => {
+const LoggingButton = ({uid}: {uid: string}) => {
     const navigate = useNavigate();
-    const auth = useAuth();
+    const dispatch = useAppDispatch();
 
-    if (auth.user) {
+    if (uid) {
         return (
             <Wrapper>
                 <StyledLoggingButton onClick={() => {
-                    auth.logout(() => navigate("/"));
+                    dispatch(logout());
                 }}>Log Out</StyledLoggingButton>
             </Wrapper>
         )

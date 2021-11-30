@@ -81,5 +81,5 @@ function useProvideAuth() {
         return () => unsubscribe();
     }, []);
 
-    return { user, login, signup, logout };
+    return;
 };

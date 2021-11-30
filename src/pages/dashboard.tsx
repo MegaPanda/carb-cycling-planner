@@ -1,6 +1,5 @@
 import { Navigate } from "react-router";
 import styled from "styled-components";
-import { useAuth } from "../custom-hooks/useAuth";
 import { UserState } from "../redux/reducers/userSlice";
 
 const Container = styled.div`
@@ -12,13 +11,11 @@ const Title = styled.p`
     font-weight: 900;
 `;
 
-const Dashboard = ({userData}: {userData: UserState}) => {
-    const auth = useAuth();
-    
-    if (Boolean(userData.tdee) && userData.username) {
+const Dashboard = ({ user }: { user: UserState }) => {
+    if (user.username) {
         return (
             <Container>
-                <Title>Hi, {userData.username}!</Title>
+                <Title>Hi, {user.username}!</Title>
             </Container>
         )
     } else {

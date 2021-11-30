@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { getCalories } from "../helpers/helpers";
-import { FoodItemType, MealType } from "../redux/reducers/userSlice";
 import FoodItem from "./foodItem";
 import { useNavigate } from "react-router";
 import { useFood } from "../custom-hooks/useFood";
+import { DiaryEntry, MealName } from "../redux/reducers/userSlice";
 
 const Container = styled.div`
     margin-top: 30px;
@@ -13,7 +13,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 6px 2px 6px 0;
+    margin: 6px 0 6px 0;
     font-size: 20px;
     font-weight: 900;
 
@@ -32,15 +32,15 @@ const Add = styled.button`
 
 const Meal = ({
     meal,
-    foodItems
+    mealItems
 }: {
-    meal: MealType,
-    foodItems: FoodItemType[] | undefined
+    meal: MealName,
+    mealItems: DiaryEntry[] | undefined
 }) => {
     const navigate = useNavigate();
     const food = useFood();
 
-    const handleClick = (action: string, meal: MealType) => {
+    const handleClick = (action: string, meal: MealName) => {
         food.setAction(action);
         food.setMeal(meal);
         navigate("/user/foodSearch");
@@ -50,11 +50,11 @@ const Meal = ({
         <Container>
             <Wrapper>
                 <p>{meal.toUpperCase()}</p>
-                <p>{foodItems && foodItems.reduce((a, b) => a + getCalories(b.carbs, b.protein, b.fat), 0)}</p>
+                <p>{mealItems && mealItems.reduce((a, b) => a + getCalories(b.food.carbs, b.food.protein, b.food.fat), 0)}</p>
             </Wrapper>
-            {foodItems && 
-                foodItems.map((foodItem, index) => {
-                    return (<FoodItem key={index} foodItem={foodItem} meal={meal} />)
+            {mealItems && 
+                mealItems.map((mealItem) => {
+                    return (<FoodItem key={mealItem.id} foodItem={mealItem.food} diaryId={mealItem.id} meal={meal} />)
                 })
             }
             <Add onClick={() => handleClick("Add Food", meal)}>ADD FOOD</Add>

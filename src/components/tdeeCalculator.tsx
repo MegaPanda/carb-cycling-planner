@@ -7,7 +7,7 @@ import SubmitButton from "./submitButton";
 
 const ToggleButton = styled.button`
     align-self: center;
-    padding: 15px 10px;
+    padding: 10px 8px;
     font-size: 10px;
     color: #E5E7EB;
     background-color: ${props => props.theme.colors.hoverGray};
@@ -34,13 +34,13 @@ const Input = styled.input`
 
 
 
-const TDEECalculator = ({userTdee}: {userTdee: number}) => {
+const TDEECalculator = ({ uid, userTdee }: { uid: string, userTdee: number }) => {
     const [data, setData] = useState({
         sex: "",
         age: 0,
         weight: 0,
         height: 0,
-        activity: 0
+        activity: 1.2
     });
 
     const dispatch = useAppDispatch();
@@ -49,20 +49,34 @@ const TDEECalculator = ({userTdee}: {userTdee: number}) => {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        dispatch(setTDEE(getTdee(data.sex, data.weight, data.height, data.age, data.activity)));
-        setShowCalculator(!showCalculator);
+        const tdee = getTdee(data.sex, data.weight, data.height, data.age, data.activity);
+        if (!tdee || tdee < 1000) {
+            alert("Invalid Data");
+        } else {
+            dispatch(setTDEE({ uid, tdee }));
+            setData({
+                sex: "",
+                age: 0,
+                weight: 0,
+                height: 0,
+                activity: 1.2
+            });
+            setShowCalculator(!showCalculator);
+        }
     };
 
     return (
         <div> 
-            <div css={`display: flex; justify-content: space-between;`}>
+            <div>
                 {/* since 0 is falsy, React won't return the second argument but the number itself */}
-                {Boolean(userTdee) && 
-                    <p>Your TDEE is <span css={`font-size: 24px; font-weight: 900;`}>&nbsp;{userTdee}&nbsp;</span> kcal/day</p>
-                }
                 <ToggleButton type="button" onClick={() => {setShowCalculator(!showCalculator);}}>
-                    {Boolean(userTdee) ? `Recalculate` : `TDEE Calculator`}
+                    {Boolean(userTdee) ? `Recalculate` : `Calculator`}
                 </ToggleButton>
+                {Boolean(userTdee) && 
+                    <p>Your TDEE is 
+                        <span css={`font-size: 24px; font-weight: 900;`}>&nbsp;{userTdee}&nbsp;</span> 
+                    kcal/day</p>
+                }
             </div>
             {showCalculator &&
                 <form onSubmit={(event) => handleSubmit(event)} css={`padding: 10px 0;`}>
@@ -99,7 +113,7 @@ const TDEECalculator = ({userTdee}: {userTdee: number}) => {
                             <option value="1.9">Athlete (2x per day)</option>
                         </select>
                     </Wrapper>
-                    <SubmitButton buttonText="CALCULATE" />
+                    <SubmitButton width="100%" buttonText="CALCULATE" />
                 </form>
             }
         </div>

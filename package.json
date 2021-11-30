@@ -1,7 +1,7 @@
 {
   "name": "carb-cycling-planner",
   "version": "0.1.0",
-  "homepage": "https://megapanda.github.io/carb-cycling-planner/",
+  "homepage": "",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-common-types": "^0.2.36",
@@ -22,7 +22,6 @@
     "firebase": "^9.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-modal": "^3.14.4",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "^4.0.3",
@@ -36,7 +35,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": [
@@ -57,10 +56,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react-modal": "^3.13.1",
     "@types/styled-components": "^5.1.15",
     "babel-plugin-styled-components": "^1.13.3",
-    "gh-pages": "^3.2.3",
     "typescript-plugin-styled-components": "^2.0.0"
   }
 }

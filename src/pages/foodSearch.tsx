@@ -3,10 +3,12 @@ import styled from "styled-components/macro";
 import FoodItem from "../components/foodItem";
 import { cancelIcon, returnIcon, searchIcon } from "../components/icons";
 import { useFood } from "../custom-hooks/useFood";
-import { ChangeEvent, useLayoutEffect, useState } from "react";
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { getFocus } from "../helpers/helpers";
 import { foodData } from "../foodData";
-import { DiaryEntryType, FoodItemType } from "../redux/reducers/userSlice";
+import { DiaryEntry, Food } from "../redux/reducers/userSlice";
+import { collection, getDocs, query, where } from "@firebase/firestore";
+import { firestoreDB } from "../firebase/firebase";
 
 const Container = styled.div`
     padding: 2rem;
@@ -72,26 +74,23 @@ const SearchButton = styled.button`
 
 
 
-const FoodSearch = ({userDiary}: {userDiary: DiaryEntryType[]}) => {
+const FoodSearch = ({ diary }: { diary: DiaryEntry[] }) => {
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
     }, []);
     
     const food = useFood();
     const navigate = useNavigate();
-    let foodHistory: FoodItemType[] = [];
-    userDiary.forEach((entry) => {
-        for (const meal of Object.values(entry.meals)) {
-            meal.forEach((food) => {
-                if (!foodHistory.some((element) => element.name === food.name)) {
-                    foodHistory.push(food);
-                }
-            });
-        };
+    let foodHistory: Food[] = [];
+    diary.forEach((entry) => {
+        if (!foodHistory.some((item) => item.name === entry.food.name)) {
+            foodHistory.push(entry.food);
+        }
     });
 
     const [searchInput, setSearchInput] = useState("");
     const [listTitle, setListTitle] = useState("History");
+    const [searchResult, setSearchResult] = useState<Food[]>([]);
 
     const handleReturn = () => {
         navigate(-1);
@@ -102,15 +101,24 @@ const FoodSearch = ({userDiary}: {userDiary: DiaryEntryType[]}) => {
         setListTitle("History");
     }
 
-    const clearInput = (id: string) => {
+    const clearInput = () => {
         setSearchInput("");
         setListTitle("History");
-        getFocus(id);
+        getFocus("search");
     };
 
-    const handleSearch = (id: string) => {
-        setListTitle("Search Results")
-        getFocus(id)
+    const handleSearch = async (text: string) => {
+        let searchResult: Food[] = [];
+        const searchQuery = query(collection(firestoreDB, "foods"), where("keywords", "array-contains", text));
+        const searchSnapshot = await getDocs(searchQuery);
+        searchSnapshot.forEach((foodDoc) => {
+            let food = foodDoc.data() as Food;
+            delete food.keywords;
+            searchResult.push(food);
+        });
+        setSearchResult([...searchResult]);
+        setListTitle("Search Results");
+        getFocus("search");
     };
 
     return (
@@ -123,22 +131,18 @@ const FoodSearch = ({userDiary}: {userDiary: DiaryEntryType[]}) => {
                     <Icon>{searchIcon()}</Icon>
                     <Input id="search" type="text" placeholder="Search food" value={searchInput} onChange={(event) => handleChange(event)}></Input>
                     {searchInput &&
-                        <CancelButton onClick={() => clearInput("search")}>{cancelIcon()}</CancelButton>
+                        <CancelButton onClick={() => clearInput()}>{cancelIcon()}</CancelButton>
                     }
                 </SearchBar>
                 <ListTitle>{listTitle}</ListTitle>
                 {!searchInput && listTitle === "History" &&
                     foodHistory.map((foodItem, index) => <FoodItem key={index} foodItem={foodItem} meal={food.meal} />)
                 }
-                {searchInput && listTitle === "Search Results" &&
-                    foodData
-                        .filter((foodItem) => foodItem.name.toLowerCase().includes(searchInput.toLowerCase()))
-                        .map((foodItem, index) => {
-                            return (<FoodItem key={index} foodItem={foodItem} meal={food.meal} />)
-                    })
+                {listTitle === "Search Results" && searchResult.length > 0 &&
+                    searchResult.map((foodItem, index) => <FoodItem key={index} foodItem={foodItem} meal={food.meal} />)
                 }
                 {searchInput && listTitle === "History" &&
-                    <SearchButton type="button" onClick={() => handleSearch("search")}>
+                    <SearchButton type="button" onClick={() => handleSearch(searchInput)}>
                         <Icon>{searchIcon()}</Icon>
                         <span>Search "{searchInput}" in all foods</span>
                     </SearchButton>

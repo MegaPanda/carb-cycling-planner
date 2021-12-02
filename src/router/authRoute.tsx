@@ -26,7 +26,7 @@ const AuthRoute = ({ uid }: { uid: string }) => {
         )
     } else {
         return (
-            <Navigate to="/login" />
+            <Navigate to="/" />
         )
     }
 };

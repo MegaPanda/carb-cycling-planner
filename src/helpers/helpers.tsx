@@ -115,3 +115,8 @@ export const getKeywords = (name: string) => {
 
     return keywordsArray;
 };
+
+export const capitalizeName = (name: string) => {
+    return name.replaceAll("-", " - ").replace(/\s+/g, " ").trim()
+        .split(" ").map(str => str[0].toUpperCase() + str.slice(1)).join(" ");
+};

@@ -175,6 +175,15 @@ export const deleteFood = createAsyncThunk(
     }
 )
 
+export const createFood = createAsyncThunk(
+    "user/createFood",
+    async ({ food }: { food: Food }) => {
+        await addDoc(collection(firestoreDB, "foods"), {
+            ...food
+        })
+    }
+)
+
 
 
 export const userSlice = createSlice({

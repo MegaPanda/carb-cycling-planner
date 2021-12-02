@@ -22,6 +22,7 @@ const LoggingButton = ({uid}: {uid: string}) => {
             <Wrapper>
                 <StyledLoggingButton onClick={() => {
                     dispatch(logout());
+                    navigate("/")
                 }}>Log Out</StyledLoggingButton>
             </Wrapper>
         )

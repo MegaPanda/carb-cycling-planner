@@ -23,7 +23,13 @@ function useProvideFood() {
     const [action, setAction] = useState("");
     const [date, setDate] = useState("");
     const [meal, setMeal] = useState<MealName>("breakfast");
-    const [foodItem, setFoodItem] = useState<Food | undefined>(undefined);
+    const [foodItem, setFoodItem] = useState<Food>({
+        name: "",
+        grams: 0,
+        carbs: 0,
+        protein: 0,
+        fat: 0    
+    });
     const [diaryId, setDiaryId] = useState<string>("");
 
     return { action, date, meal, foodItem, diaryId, setAction, setDate, setMeal, setFoodItem, setDiaryId };

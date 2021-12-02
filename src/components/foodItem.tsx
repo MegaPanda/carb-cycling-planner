@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import useAppDispatch from "../custom-hooks/useAppDispatch";
 import { useFood } from "../custom-hooks/useFood";
 import useToggle from "../custom-hooks/useToggle";
-import { getCalories } from "../helpers/helpers";
+import { capitalizeName, getCalories } from "../helpers/helpers";
 import { deleteFood, Food, MealName } from "../redux/reducers/userSlice";
 import { ellipsisIcon } from "./icons";
 import FullPageModal from "./fullPageModal";
@@ -98,7 +98,7 @@ const FoodItem = ({
         <Container>
             <FoodButton onClick={() => showFoodDetails()}>
                 <div>
-                    <Title>{foodItem.name}</Title>
+                    <Title>{capitalizeName(foodItem.name)}</Title>
                     <Weight>{foodItem.grams} gram</Weight>
                 </div>
             </FoodButton>

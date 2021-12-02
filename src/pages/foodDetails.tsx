@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components/macro";
-import { getCalories, getUpdatedMacros } from "../helpers/helpers";
+import { capitalizeName, getCalories, getUpdatedMacros } from "../helpers/helpers";
 import { addIcon, returnIcon } from "../components/icons";
 import { useNavigate } from "react-router";
 import useAppDispatch from "../custom-hooks/useAppDispatch";
@@ -49,7 +49,14 @@ const Weight = styled.div`
 
     input {
         width: 80px;
+        padding: 8px;
+        text-align: center;
         font-size: 1.5rem;
+
+        :focus {
+            border-color: transparent;
+            outline: 2px solid ${props => props.theme.colors.focusBlue};
+        }
     }
 `;
 
@@ -73,8 +80,8 @@ const FoodItemDetails = ({ uid }: { uid: string }) => {
     const dispatch = useAppDispatch();
     const food = useFood();
    
-    const [gramsInput, setGramsInput] = useState(food.foodItem?.grams);
-    const updatedFoodItem = getUpdatedMacros(food.foodItem!, gramsInput!);
+    const [gramsInput, setGramsInput] = useState(food.foodItem.grams);
+    const updatedFoodItem = getUpdatedMacros(food.foodItem, gramsInput);
     
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value ? event.target.value : "0";
@@ -92,16 +99,16 @@ const FoodItemDetails = ({ uid }: { uid: string }) => {
                 food: updatedFoodItem,
                 date: food.date,
                 meal: food.meal
-            }));
-            navigate(-2);
+            })).then(() => navigate(-2));
         } else if (food.action === "Edit Food") {
             dispatch(updateFood({ 
                 uid,
                 diaryId: food.diaryId,
                 food: updatedFoodItem
-            }));
-            food.setDiaryId("");
-            navigate(-1);
+            })).then(() => {
+                food.setDiaryId("");
+                navigate(-1);
+            });
         } 
     };
 
@@ -112,10 +119,9 @@ const FoodItemDetails = ({ uid }: { uid: string }) => {
                 <p>{food.action}</p>
                 <button type="button" onClick={() => handleSubmit()}>{addIcon()}</button>
             </Nav>
-            <h1 css={`
-                font-size: 36px; 
-                margin: 2rem 0;
-            `}>{updatedFoodItem.name}</h1>
+            <h1 css={`font-size: 36px; margin: 2rem 0;`}>
+                {capitalizeName(updatedFoodItem.name)}
+            </h1>
             <Nutrients>
                 <Nutrient>
                     <p>Carbs</p>
@@ -131,11 +137,7 @@ const FoodItemDetails = ({ uid }: { uid: string }) => {
                 </Nutrient>
             </Nutrients>
             <Weight>
-                <input type="tel" value={gramsInput} onChange={(event) => handleChange(event)} css={`
-                    width: 60px;
-                    padding: 8px;
-                    text-align: center;
-                `}/> g
+                <input type="tel" value={gramsInput} onChange={(event) => handleChange(event)}/> g
             </Weight>
             <Calories>
                 <h3>Calories</h3>

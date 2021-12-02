@@ -1,4 +1,4 @@
-import { faCaretLeft, faCaretRight, faCheck, faChevronLeft, faChevronRight, faEllipsisH, faEnvelope, faHome, faSearch, faTimes, faUndo, faUnlockAlt, faUserCircle, faUserCog, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faCaretLeft, faCaretRight, faCheck, faChevronLeft, faChevronRight, faEllipsisH, faEnvelope, faHome, faPlus, faSearch, faTimes, faUndo, faUnlockAlt, faUserCircle, faUserCog, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
@@ -21,3 +21,4 @@ export const cancelIcon = () => (<StyledIcon icon={faTimes} />);
 export const caretLeftIcon = () => (<StyledIcon icon={faCaretLeft} />);
 export const caretRightIcon = () => (<StyledIcon icon={faCaretRight} />);
 export const undoIcon = () => (<StyledIcon icon={faUndo} />);
+export const plusIcon = () => (<StyledIcon icon={faPlus} />);

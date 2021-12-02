@@ -6,7 +6,7 @@ import { useFood } from "../custom-hooks/useFood";
 import { DiaryEntry, MealName } from "../redux/reducers/userSlice";
 
 const Container = styled.div`
-    margin-top: 30px;
+    margin-top: 2rem;
     box-shadow: rgba(33, 35, 38, 0.1) 0px 12px 12px -10px;
 `;
 

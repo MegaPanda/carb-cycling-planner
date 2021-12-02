@@ -14,6 +14,7 @@ import FoodSearch from './pages/foodSearch';
 import { ProvideFood } from './custom-hooks/useFood';
 import useAppSelector from './custom-hooks/useAppSelector';
 import Setup from './pages/setup';
+import CreateFood from './pages/createFood';
 
 const Container = styled.div`
     position: relative;
@@ -58,6 +59,7 @@ function App() {
                 <Route path="setting" element={<Setting user={user} />} />
                 <Route path="foodDetails" element={<FoodItemDetails uid={user.uid} />} />
                 <Route path="foodSearch" element={<FoodSearch diary={user.diary} />} />
+                <Route path="createFood" element={<CreateFood uid={user.uid} />} />
               </Route>
           </Routes>
         </Container>

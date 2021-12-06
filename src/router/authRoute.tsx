@@ -7,7 +7,7 @@ import { useFood } from "../custom-hooks/useFood";
 const AuthRoute = ({ uid }: { uid: string }) => {
     const location = useLocation();
     const food = useFood();
-    const date = format(new Date(), "dd MMM");
+    const date = format(new Date(), "dd/MMM/yyyy");
 
     useEffect(() => {
         food.setDate(date);
@@ -19,6 +19,7 @@ const AuthRoute = ({ uid }: { uid: string }) => {
                 <Outlet />
                 {location.pathname !== "/user/foodSearch" && 
                 location.pathname !== "/user/foodDetails" &&
+                location.pathname !== "/user/createFood" &&
                 location.pathname !== "/user/setup" &&
                     <Nav />
                 }

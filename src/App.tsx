@@ -30,7 +30,7 @@ function App() {
 
   return (
       <ThemeProvider theme={theme}>
-        <Container>
+        <Container id="app">
           <Routes>
             <Route path="/" element={
                                   <PublicRoute>

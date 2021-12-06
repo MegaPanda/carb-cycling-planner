@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import FoodItem from "../components/foodItem";
 import { cancelIcon, plusIcon, returnIcon, searchIcon } from "../components/icons";
 import { useFood } from "../custom-hooks/useFood";
-import { ChangeEvent, useLayoutEffect, useState } from "react";
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { getFocus } from "../helpers/helpers";
 import { DiaryEntry, Food } from "../redux/reducers/userSlice";
 import { collection, getDocs, query, where } from "@firebase/firestore";
@@ -17,10 +17,14 @@ const Nav = styled.div`
     display: flex;
     font-size: 24px;
 
+    button {
+        width: 25px;
+    }
+
     p {
         flex: 1;
         margin: auto;
-        padding-left: 2rem;
+        padding-left: 1.5rem;
         font-weight: 900;
     }
 `;
@@ -75,6 +79,10 @@ const NoResultMessage = styled.div`
 const FoodSearch = ({ diary }: { diary: DiaryEntry[] }) => {
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        food.setAction("Add Food");
     }, []);
     
     const food = useFood();
@@ -133,7 +141,7 @@ const FoodSearch = ({ diary }: { diary: DiaryEntry[] }) => {
                 </Nav>
                 <SearchBar>
                     <Icon>{searchIcon()}</Icon>
-                    <Input id="search" type="text" placeholder="Search food" value={searchInput} onChange={(event) => handleChange(event)}></Input>
+                    <Input id="search" type="text" inputMode="text" placeholder="Search food" value={searchInput} onChange={(event) => handleChange(event)}></Input>
                     {searchInput &&
                         <CancelButton onClick={() => clearInput()}>{cancelIcon()}</CancelButton>
                     }
@@ -154,7 +162,7 @@ const FoodSearch = ({ diary }: { diary: DiaryEntry[] }) => {
                     searchResult.map((foodItem, index) => <FoodItem key={index} foodItem={foodItem} meal={food.meal} />)
                 }
                 {listTitle === "Search Results" && searchResult.length === 0 &&
-                    <NoResultMessage>No food is found. Click the &nbsp;{plusIcon()}&nbsp; at the top-right corner to create a new food.</NoResultMessage>
+                    <NoResultMessage>No food is found. Click &nbsp;{plusIcon()}&nbsp; at the top-right corner to create a new food.</NoResultMessage>
                 }
             </Container>
     )

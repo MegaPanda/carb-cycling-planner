@@ -168,7 +168,7 @@ const DailyGoal = ({
                     </div>
                     <MicrosWrapper>
                         <Micro> 
-                            <span>Carbs:</span>
+                            <span>Carbs</span>
                             <MicroGrams over={microsGoal.carbs - consumedMicros.carbs < 0}>
                                 {microsGoal.carbs - consumedMicros.carbs < 0 
                                     ? "+" + Math.abs(microsGoal.carbs - consumedMicros.carbs)
@@ -177,7 +177,7 @@ const DailyGoal = ({
                             </MicroGrams>
                         </Micro>
                         <Micro>
-                            <span>Protein:</span>
+                            <span>Protein</span>
                             <MicroGrams over={microsGoal.protein - consumedMicros.protein < 0}>
                                 {microsGoal.protein - consumedMicros.protein < 0
                                     ? "+" + Math.abs(microsGoal.protein - consumedMicros.protein)
@@ -186,7 +186,7 @@ const DailyGoal = ({
                             </MicroGrams>
                         </Micro>
                         <Micro>
-                            <span>Fat:</span>
+                            <span>Fat</span>
                             <MicroGrams over={microsGoal.fat - consumedMicros.fat < 0}>
                                 {microsGoal.fat - consumedMicros.fat < 0
                                     ? "+" + Math.abs(microsGoal.fat - consumedMicros.fat)
@@ -195,7 +195,7 @@ const DailyGoal = ({
                             </MicroGrams>
                         </Micro>
                         <Micro>
-                            <span>Calories:</span>
+                            <span>Calories</span>
                             <MicroGrams over={microsGoal.calories - consumedMicros.calories < 0}>
                                 {microsGoal.calories - consumedMicros.calories < 0
                                     ? "+" + Math.abs(microsGoal.calories - consumedMicros.calories)

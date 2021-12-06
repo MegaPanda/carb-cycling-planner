@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 import Meal from "../components/meal";
 import { format, parse } from "date-fns";
 import { useFood } from "../custom-hooks/useFood";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { caretLeftIcon, caretRightIcon } from "../components/icons";
 import { addDays } from "date-fns/esm";
 import { Navigate } from "react-router";
@@ -30,6 +30,10 @@ const Icon = styled.button`
 
 
 const Diary = ({ user }: { user: UserState }) => {
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const food = useFood();
 
     useEffect(() => {
@@ -40,7 +44,7 @@ const Diary = ({ user }: { user: UserState }) => {
     const dailyCarbsLevel = user.carbsLevel[food.date];
 
     const handleNewDate = (distance: number) => {
-        const newDate = format(addDays(parse(food.date, "dd MMM", new Date()), distance), "dd MMM");
+        const newDate = format(addDays(parse(food.date, "dd/MMM/yyyy", new Date()), distance), "dd/MMM/yyyy");
         food.setDate(newDate);
     };
 
@@ -51,7 +55,7 @@ const Diary = ({ user }: { user: UserState }) => {
             <Container>
                 <DiaryDate>
                     <Icon type="button" onClick={() => handleNewDate(-1)}>{caretLeftIcon()}</Icon>
-                    <h3>{food.date}</h3>
+                    <h3>{format(parse(food.date, "dd/MMM/yyyy", new Date()), "EEE, dd MMM")}</h3>
                     <Icon type="button" onClick={() => handleNewDate(1)}>{caretRightIcon()}</Icon>
                 </DiaryDate>
                 <DailyGoal uid={user.uid} tdee={user.tdee} goal={user.goal} dailyCarbsLevel={dailyCarbsLevel} consumedMicros={consumedMicros} />

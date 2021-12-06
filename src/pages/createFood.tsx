@@ -17,13 +17,14 @@ const Nav = styled.div`
     font-size: 24px;
     
     button {
+        width: 25px;
         font-size: inherit;
     }
 
     p {
         flex: 1;
         margin: auto;
-        padding-left: 2rem;
+        padding-left: 1.5rem;
     }
 `;
 
@@ -234,7 +235,7 @@ const CreateFood = ({ uid }: { uid: string }) => {
                 <h3>Calories</h3>
                 <h1>{
                     isNaN(parseFloat(foodToCreate.carbs)) || isNaN(parseFloat(foodToCreate.protein)) || isNaN(parseFloat(foodToCreate.fat))
-                        ? <span css={`font-size: 0.25rem; font-style: italic; opacity: 0.5;`}>Fill the micros to get calories!</span>
+                        ? <span css={`font-size: 0.5rem; font-style: italic; opacity: 0.5;`}>Fill the micros to get calories!</span>
                         : getCalories(parseFloat(foodToCreate.carbs), parseFloat(foodToCreate.protein), parseFloat(foodToCreate.fat))
                 }</h1>
             </Calories>

@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut, updateProfile } from "@firebase/auth";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "@firebase/firestore";
+import { FirebaseError } from "@firebase/util";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { firebaseApp, firestoreDB } from "../../firebase/firebase";
 
@@ -32,6 +33,7 @@ export interface UserState {
     goal: string;
     diary: DiaryEntry[];
     carbsLevel: DailyCarbsLevel;
+    firebaseError?: string;
 }
 
 interface UserDataQuery {
@@ -52,29 +54,43 @@ const initialState: UserState = {
     tdee: 0,
     goal: "maintaining",
     diary: [],
-    carbsLevel: {}
+    carbsLevel: {},
+    firebaseError: ""
 }
 
 const auth = getAuth(firebaseApp);
 
-export const signup = createAsyncThunk(
+export const signup = createAsyncThunk<
+    { uid: string },
+    { email: string, password: string },
+    { rejectValue: string }
+>(
     "user/signup",
-    async ({ email, password }: { email: string, password: string }) => {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(firestoreDB, "users", userCredential.user.uid), {
-            tdee: 0,
-            goal: "maintaining",
-            carbsLevel: {}
-        });
-        return { uid: userCredential.user.uid }
+    async ({ email, password }, thunkAPI) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            return { uid: userCredential.user.uid }
+        } catch (err) {
+            const error = err as FirebaseError;
+            return thunkAPI.rejectWithValue(error.code);
+        }
 });
 
 
-export const login = createAsyncThunk(
+export const login = createAsyncThunk<
+    { uid: string, username: string | null },
+    { email: string, password: string },
+    { rejectValue: string }
+>(
     "user/login",
-    async ({ email, password }: { email: string, password: string }) => {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return { uid: userCredential.user.uid, username: userCredential.user.displayName }
+    async ({ email, password }, thunkAPI) => {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            return { uid: userCredential.user.uid, username: userCredential.user.displayName };
+        } catch (err) {
+            const error = err as FirebaseError;
+            return thunkAPI.rejectWithValue(error.code)
+        }
 });
 
 export const fetchUserData = createAsyncThunk(
@@ -194,11 +210,19 @@ export const userSlice = createSlice({
             state.uid = action.payload.uid;
             state.username = action.payload.username;
         },
+        setError: (state, action: PayloadAction<string>) => {
+            state.firebaseError = action.payload;
+        }
     },
     extraReducers: (builder) => {
-        builder.addCase(signup.rejected, () => console.log("sign up failed"))
+        builder.addCase(signup.rejected, (state, action) => {
+            state.firebaseError = action.payload;
+        })
         builder.addCase(signup.fulfilled, (state, action) => {
             state.uid = action.payload.uid;
+        })
+        builder.addCase(login.rejected, (state, action) => {
+            state.firebaseError = action.payload;
         })
         builder.addCase(login.fulfilled, (state, action) => {
             state.uid = action.payload.uid;

@@ -16,13 +16,14 @@ const Nav = styled.div`
     font-size: 24px;
     
     button {
+        width: 25px;
         font-size: inherit;
     }
 
     p {
         flex: 1;
         margin: auto;
-        padding-left: 2rem;
+        padding-left: 1.5rem;
     }
 `;
 
@@ -137,7 +138,7 @@ const FoodItemDetails = ({ uid }: { uid: string }) => {
                 </Nutrient>
             </Nutrients>
             <Weight>
-                <input type="tel" value={gramsInput} onChange={(event) => handleChange(event)}/> g
+                <input type="number" inputMode="numeric" value={gramsInput} onChange={(event) => handleChange(event)}/> g
             </Weight>
             <Calories>
                 <h3>Calories</h3>

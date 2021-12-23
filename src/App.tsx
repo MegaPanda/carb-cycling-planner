@@ -1,6 +1,6 @@
 import styled, { ThemeProvider } from 'styled-components/macro';
 import { Routes, Route } from 'react-router-dom';
-import theme from './theme';
+import theme, { GlobalStyle } from './theme';
 import Login from './pages/login';
 import SignUp from './pages/signup';
 import Home from './pages/home';
@@ -30,6 +30,7 @@ function App() {
 
   return (
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Container id="app">
           <Routes>
             <Route path="/" element={

@@ -1,5 +1,42 @@
 import 'styled-components';
-import { CSSProp } from 'styled-components';
+import { createGlobalStyle, CSSProp } from 'styled-components';
+
+export const GlobalStyle = createGlobalStyle`
+    html {
+        box-sizing: border-box;
+        cursor: default;
+    }
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+`;
 
 const theme = {
     border: "1px solid #D1D5DB",

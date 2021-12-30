@@ -1,6 +1,6 @@
 # Carb Cycling Planner
 
-[![website image]()](https://megapanda.github.io/fluffy-tshirt-shop/)
+[![website image](https://github.com/MegaPanda/carb-cycling-planner/blob/master/public/home.png?raw=true)](https://megapanda.github.io/fluffy-tshirt-shop/)
 
 ## About The Project
 A web app for easy planning and tracking your carb cycling diet. Calculate your TDEE, set up your goal, and choose between high-mid-low carb to know your daily targeting micros. Search or simply create your own food data to keep your diet diary on track. The app will automatically calculate the consumed calories and visualize your progress.

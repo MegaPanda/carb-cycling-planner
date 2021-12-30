@@ -1,46 +1,33 @@
-# Getting Started with Create React App
+# Carb Cycling Planner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![website image]()](https://megapanda.github.io/fluffy-tshirt-shop/)
 
-## Available Scripts
+## About The Project
+A web app for easy planning and tracking your carb cycling diet. Calculate your TDEE, set up your goal, and choose between high-mid-low carb to know your daily targeting micros. Search or simply create your own food data to keep your diet diary on track. The app will automatically calculate the consumed calories and visualize your progress.
 
-In the project directory, you can run:
+## Link
+Click the link to check out the app: https://carb-cycling-planner.web.app/
 
-### `npm start`
+## Usage
+#### &nbsp;&nbsp;Tester Account Access
+> Email: tester123@email.com
+> password: xyz2000
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### &nbsp;&nbsp;Diary
+&nbsp;&nbsp;&nbsp;&nbsp;Add, remove or edit your food items under the meal categories. Select your daily carbs intake and the app will calculate your daily micros goal.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### &nbsp;&nbsp;Search
+&nbsp;&nbsp;&nbsp;&nbsp;Quick add any food items from your history or search for a new food. If it's not found in the database, simply create a new one.
 
-### `npm test`
+#### &nbsp;&nbsp;Dashboard
+&nbsp;&nbsp;&nbsp;&nbsp;Review your diary entries with clear data visualization and access the diary of any specific day from a simple click.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Built with
+- TypeScript
+- React
+- Redux / Redux Toolkit
+- React Router v6
+- styled-components
+- Firebase Authentication
+- Firestore Database
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

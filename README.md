@@ -11,8 +11,8 @@ Click the link to check out the app: https://carb-cycling-planner.web.app/
 
 ## Usage
 #### &nbsp;&nbsp;Tester Account Access
-> Email: tester123@email.com <br />
-> password: xyz2000
+> Email: `tester123@email.com` <br />
+> Password: `xyz2000`
 
 #### &nbsp;&nbsp;Diary
 <img src="https://github.com/MegaPanda/carb-cycling-planner/blob/master/public/diary.png?raw=true" alt="diary page" width="200px" />

@@ -11,7 +11,7 @@ Click the link to check out the app: https://carb-cycling-planner.web.app/
 
 ## Usage
 #### &nbsp;&nbsp;Tester Account Access
-> Email: tester123@email.com
+> Email: tester123@email.com <br />
 > password: xyz2000
 
 #### &nbsp;&nbsp;Diary

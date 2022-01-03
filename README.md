@@ -10,7 +10,7 @@ A web app for easy planning and tracking your carb cycling diet. Calculate your 
 Click the link to check out the app: https://carb-cycling-planner.web.app/
 
 ## Usage
-### &nbsp;&nbsp;Tester Account Access
+### &nbsp;&nbsp;Tester Account Playground
 > Email: `tester123@email.com` <br />
 > Password: `xyz2000`
 
